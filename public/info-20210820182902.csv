@@ -1,0 +1,66 @@
+サロンID,サロン名,オーナー名,"Facebook URL",ユーザーID,ユーザー名,当月決済金額
+9,aaaa,namenamename,pajeiaw,1,"panda san",7890
+9,aaaa,namenamename,pajeiaw,2,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,3,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,4,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,5,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,6,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,7,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,8,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,9,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,10,"panda san",FAIL
+9,aaaa,namenamename,pajeiaw,11,"panda san",FAIL
+8,karisalon,kari,karikari.com,12,watashi,9999
+8,karisalon,kari,karikari.com,13,watashi,9999
+6,"a san no. salon",asan,asan.fb.com,14,watashi,100
+12,pandaaaaa,namenamename,pandada.com,15,aaa,9854
+12,pandaaaaa,namenamename,pandada.com,16,aaa,FAIL
+12,pandaaaaa,namenamename,pandada.com,17,aaa,FAIL
+12,pandaaaaa,namenamename,pandada.com,18,aaa,FAIL
+12,pandaaaaa,namenamename,pandada.com,19,aaa,FAIL
+8,karisalon,kari,karikari.com,20,me,FAIL
+6,"a san no. salon",asan,asan.fb.com,21,aaaa,100
+9,aaaa,namenamename,pajeiaw,22,test,7890
+12,pandaaaaa,namenamename,pandada.com,23,test,9854
+9,aaaa,namenamename,pajeiaw,24,test,7890
+8,karisalon,kari,karikari.com,25,watashi,9999
+9,aaaa,namenamename,pajeiaw,26,test,FAIL
+12,pandaaaaa,namenamename,pandada.com,27,aaaa,9854
+8,karisalon,kari,karikari.com,28,aaaa,9999
+9,aaaa,namenamename,pajeiaw,29,aaaa,FAIL
+9,aaaa,namenamename,pajeiaw,30,aaaa,FAIL
+12,pandaaaaa,namenamename,pandada.com,31,深海院,9854
+9,aaaa,namenamename,pajeiaw,32,panda,7890
+6,"a san no. salon",asan,asan.fb.com,33,田中,100
+13,佐藤の写真サロン,佐藤,sato.shasin.fb.com,34,わたし,40000
+13,佐藤の写真サロン,佐藤,sato.shasin.fb.com,35,わたし,FAIL
+13,佐藤の写真サロン,佐藤,sato.shasin.fb.com,36,わたし,FAIL
+13,佐藤の写真サロン,佐藤,sato.shasin.fb.com,37,わたし,FAIL
+14,今日も猫山です,猫山ねこ,nekoyama.fb.com,38,neko,100000
+13,佐藤の写真サロン,佐藤,sato.shasin.fb.com,39,佐藤ファン,40000
+14,今日も猫山です,猫山ねこ,nekoyama.fb.com,40,犬川いぬ,100000
+15,小さなサロン,ミニ丸,chiisanasalon.fb.com,41,watashi,398
+15,小さなサロン,ミニ丸,chiisanasalon.fb.com,42,犬山神子,398
+15,小さなサロン,ミニ丸,chiisanasalon.fb.com,43,適当さん,398
+8,karisalon,kari,karikari.com,44,jjj,9999
+21,佐藤の写真サロン・進化版,佐藤,sato.shasin-shinka.fb.com,45,satosato,569
+21,佐藤の写真サロン・進化版,佐藤,sato.shasin-shinka.fb.com,46,kikaikko,569
+21,佐藤の写真サロン・進化版,佐藤,sato.shasin-shinka.fb.com,47,watashi,569
+20,上野のパンダサロン,namenamename,panda.love.fb.com,48,watashi,831
+20,上野のパンダサロン,namenamename,panda.love.fb.com,49,watashi,FAIL
+17,田中のロングサロン,田中,ronguhea.fb.com,50,panda,659
+17,田中のロングサロン,田中,ronguhea.fb.com,51,panda,FAIL
+17,田中のロングサロン,田中,ronguhea.fb.com,52,panda,FAIL
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,53,税金代行,50000
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,54,税金代行,FAIL
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,55,buta,50000
+18,ミニミニサロン3,ミニ丸,minisalon.fb.com,56,MINIKO,323
+13,佐藤の写真サロン,佐藤,sato.shasin.fb.com,57,Aさん,40000
+18,ミニミニサロン3,ミニ丸,minisalon.fb.com,58,仮谷仮太郎,323
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,59,仮谷仮太郎,50000
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,60,裏山浦次郎,50000
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,61,testたかし,50000
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,62,test花子,50000
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,63,テスト翔,50000
+16,裏社会サロン,丸山権三,ichigo.cream.fb.com,64,次葉勝,50000
+6,"a san no. salon",asan,asan.fb.com,65,gatti,100
