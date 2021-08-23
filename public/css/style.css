@@ -245,11 +245,11 @@ input:focus, textarea:focus {
 .entry-btn_center {
     margin-left: 12px;
 }
-.to-home-btn, .salon-register-btn, .to-create-salon-btn {
+.to-home-btn, .salon-register-btn, .to-create-salon-btn, .system_csv-btn {
     margin-right: 12px;
     background-color: rgba(247, 182, 96, .4);
 }
-.to-home-btn:hover, .salon-register-btn:hover, .to-create-salon-btn:hover {
+.to-home-btn:hover, .salon-register-btn:hover, .to-create-salon-btn:hover, .system_csv-btn:hover {
     background-color: rgba(247, 182, 96, 1);
 }
 /* entry page */
@@ -440,14 +440,13 @@ HEADER */
     max-width: 700px;
     margin: 20px auto;
     position: relative;
-    /* background-color: aqua; */
 }
 .system_csv-btn {
     position: absolute;
     right: 0;
     top: 38px;
-    width: 100px;
-    height: 30px;
+    width: 180px;
+    height: 38px;
 }
 table {
     border-collapse: collapse;
@@ -464,4 +463,46 @@ table th {
 }
 .table-users, .table-deleted {
     text-align: right;
+}
+
+/* Users info */
+.system__users-list-lead {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.users-list_num {
+    line-height: 1;
+    margin: 0 0 8px 0;
+}
+.csv-btn_users {
+    top: 0;
+}
+/* Pagination */
+.page-index-container {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    margin: 0 0 8px 0;
+}
+.page-index-container_bottom {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    /* margin-bottom: 50px; */
+}
+.page-link {
+    font-size: 16px;
+    margin: 0 8px;
+    line-height: 1;
+    display: inline-block;
+}
+.page-link_arrow {
+    font-size: 30px;
+    font-weight: normal;
+}
+.paginate_bottom {
+    display: flex;
+    justify-content: center;
 }

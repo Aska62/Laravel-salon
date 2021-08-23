@@ -52,10 +52,15 @@ class SystemController extends Controller
     /**
      * Output owners info to CSV
      *
-     * @return redirect
+     * @return response
      */
     public function outputCSV(Request $request) {
-        $this->systemSer->output($request->owners);
-        return redirect()->route('system.top');
+        $filename = 'info-'.date('YmdHis').'.csv';
+        $header = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename='.$filename,
+            'Pragma' => 'no-cache',
+        ];
+        return response()->make($this->systemSer->createCsv($filename), 200, $header)->send();
     }
 }

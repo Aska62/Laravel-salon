@@ -65,68 +65,56 @@
         /**
          * Output salon info to CSV
          *
+         * @param String $filename
          *
          */
-        public function output() {
-            $filename = 'info-'.date('YmdHis').'.csv';
-            $header = [
-                'Content-Type' => 'text/csv',
-                'Content-Disposition' => 'attachment; filename='.$filename,
-                'Pragma' => 'no-cache',
+        public function createCSV(String $filename) {
+            $head = [
+                'サロンID',
+                'サロン名',
+                'オーナー名',
+                'Facebook URL',
+                'ユーザーID',
+                'ユーザー名',
+                date('Y').'年'.date('m').'月決済金額'
             ];
 
-            $createCsv = function($filename) {
-                $head = [
-                    'サロンID',
-                    'サロン名',
-                    'オーナー名',
-                    'Facebook URL',
-                    'ユーザーID',
-                    'ユーザー名',
-                    date('Y').'年'.date('m').'月決済金額'
+            $users = User::leftJoin('payments', function ($join) {
+                $join->on('users.id', '=', 'payments.user_id')
+                    ->where('payments.payment_for', date('Ym'));
+                })
+                ->whereNull('users.deleted_at')
+                ->orWhere('users.deleted_at', '>=', strtotime(date('Ym').'01 00:00:00'))
+                ->orderBy('users.salon_id', 'asc')
+                ->orderBy('payments.amount')
+                ->orderBy('users.id', 'asc')
+                ->get();
+
+            $info = [];
+
+            foreach($users as $user) {
+                $info[] = [
+                    'salon_id' => $user->salon_id?? 'NULL',
+                    'salon_name' => $user->getSalon()->name?? 'NULL',
+                    'owner_name' => $user->getSalon()->ownerName()[0]->owner_name,
+                    'facebook' => $user->getSalon()->facebook?? 'NULL',
+                    'userId' => $user->id,
+                    'userName' => $user->name,
+                    'payment' => $user->amount?? 'FAIL'
                 ];
-
-                $users = User::leftJoin('payments', function ($join) {
-                    $join->on('users.id', '=', 'payments.user_id')
-                        ->where('payments.payment_for', date('Ym'));
-                    })
-                    ->whereNull('users.deleted_at')
-                    ->orWhere('users.deleted_at', '>=', strtotime(date('Ym').'01 00:00:00'))
-                    ->orderBy('users.salon_id', 'asc')
-                    ->orderBy('payments.amount')
-                    ->orderBy('users.id', 'asc')
-                    ->get();
-
-                // ddd($users);
-                $info = [];
-
-                foreach($users as $user) {
-                    // var_dump($user->payment['amount']);die();
-                    $info[] = [
-                        'salon_id' => $user->salon_id?? 'NULL',
-                        'salon_name' => $user->getSalon()->name?? 'NULL',
-                        'owner_name' => $user->getSalon()->ownerName()[0]->owner_name,
-                        'facebook' => $user->getSalon()->facebook?? 'NULL',
-                        'userId' => $user->id,
-                        'userName' => $user->name,
-                        'payment' => $user->amount?? 'FAIL'
-                    ];
+            }
+            // var_dump($user->salon()->ownerName()[0]->owner_name);
+            // ddd($info);
+            // exit();
+            $f = fopen('php://output', 'w');
+            if($f) {
+                mb_convert_variables('SJIS', 'UTF-8', $head);
+                fputcsv($f, $head);
+                foreach($info as $inf) {
+                    mb_convert_variables('SJIS', 'UTF-8', $inf);
+                    fputcsv($f, $inf);
                 }
-                // var_dump($user->salon()->ownerName()[0]->owner_name);
-                // ddd($info);
-                // exit();
-                $f = fopen('php://output', 'w');
-                if($f) {
-                    mb_convert_variables('SJIS', 'UTF-8', $head);
-                    fputcsv($f, $head);
-                    foreach($info as $inf) {
-                        mb_convert_variables('SJIS', 'UTF-8', $inf);
-                        fputcsv($f, $inf);
-                    }
-                }
-                fclose($f);
-            };
-            // ddd($createCsv($filename));
-            return response()->make($createCsv($filename), 200, $header)->send();
+            }
+            fclose($f);
         }
     }

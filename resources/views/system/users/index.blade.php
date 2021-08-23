@@ -9,8 +9,16 @@
     </section>
     <section class="system__top-content">
         <h3>ユーザー一覧</h3>
-        <p>総数：{{ $totalUserCount }}名</p>
-        <p>アクティブユーザー: {{ count($activeUsers) }}名</p>
+        <form action="{{route('system.output')}}" method="get">
+            <button type="submit" class="btn system_csv-btn csv-btn_users">今月のデータをCSV出力</button>
+        </form>
+        <div class="system__users-list-lead">
+            <div class="users-list-total">
+                <p class="users-list_num">総数：{{ $totalUserCount }}名</p>
+                <p class="users-list_num">アクティブユーザー: {{ count($activeUsers) }}名</p>
+            </div>
+            {{ $users->links() }}
+        </div>
         <table>
             <tr>
                 <th>アカウント名</th>
@@ -25,7 +33,9 @@
                 </tr>
             @endforeach
         </table>
-        {{ $users->links() }}
+        <div class="paginate_bottom">
+            {{ $users->links() }}
+        </div>
     </section>
 </div>
 @endsection
