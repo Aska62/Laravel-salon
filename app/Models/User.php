@@ -30,7 +30,12 @@ class User extends Model
     ];
     public function salon()
     {
-        return $this->belongsTo(Salon::class)->first();
+        return $this->belongsTo(Salon::class);
+    }
+
+    public function getSalon()
+    {
+        return $this->salon()->first();
     }
 
     public function payment()

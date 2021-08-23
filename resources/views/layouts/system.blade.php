@@ -20,9 +20,6 @@
 </head>
 <body>
     <header class="header system-header">
-        <a class="header__link system_header-left" href="{{route('system.top')}}">
-            管理画面
-        </a>
         <a class="header__link system_header-left" href="{{route('user.home')}}">
             ユーザーの方
         </a>
@@ -38,9 +35,6 @@
         </a>
         <a class="header__link system_header-right" href="{{route('system.users')}}">
             ユーザー一覧
-        </a>
-        <a class="header__link system_header-right" href="{{route('system.payments')}}">
-            支払情報
         </a>
     </header><!-- end header -->
 

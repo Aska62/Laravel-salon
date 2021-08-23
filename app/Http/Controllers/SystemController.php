@@ -44,8 +44,6 @@ class SystemController extends Controller
      * @return view
      */
     public function paymentHistory() {
-        // TO RETURN:
-        // payments with 次毎の総支払額・総ユーザー数
         return view('system.payments.index', [
             'payments' => $this->systemSer->getMonthlyPayment()
         ]);
@@ -57,7 +55,6 @@ class SystemController extends Controller
      * @return redirect
      */
     public function outputCSV(Request $request) {
-        var_dump('hi!');
         $this->systemSer->output($request->owners);
         return redirect()->route('system.top');
     }

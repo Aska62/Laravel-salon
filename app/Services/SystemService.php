@@ -67,7 +67,6 @@
          *
          *
          */
-
         public function output() {
             $filename = 'info-'.date('YmdHis').'.csv';
             $header = [
@@ -77,7 +76,6 @@
             ];
 
             $createCsv = function($filename) {
-                // var_dump('hi');die();
                 $head = [
                     'サロンID',
                     'サロン名',
@@ -85,12 +83,13 @@
                     'Facebook URL',
                     'ユーザーID',
                     'ユーザー名',
-                    '当月決済金額'
+                    date('Y').'年'.date('m').'月決済金額'
                 ];
 
-                //TODO: fix orderby
-                $users = User::leftJoin('payments', 'users.id', '=', 'payments.id')
-                    ->where('payments.payment_for', date('Ym'))
+                $users = User::leftJoin('payments', function ($join) {
+                    $join->on('users.id', '=', 'payments.user_id')
+                        ->where('payments.payment_for', date('Ym'));
+                    })
                     ->whereNull('users.deleted_at')
                     ->orWhere('users.deleted_at', '>=', strtotime(date('Ym').'01 00:00:00'))
                     ->orderBy('users.salon_id', 'asc')
@@ -99,25 +98,24 @@
                     ->get();
 
                 // ddd($users);
-
                 $info = [];
 
                 foreach($users as $user) {
                     // var_dump($user->payment['amount']);die();
                     $info[] = [
-                        'salon_id' => $user->salon()->id,
-                        'salon_name' => $user->salon()->name,
-                        'owner_name' => $user->salon()->ownerName()[0]->owner_name,
-                        'facebook' => $user->salon()->facebook,
+                        'salon_id' => $user->salon_id?? 'NULL',
+                        'salon_name' => $user->getSalon()->name?? 'NULL',
+                        'owner_name' => $user->getSalon()->ownerName()[0]->owner_name,
+                        'facebook' => $user->getSalon()->facebook?? 'NULL',
                         'userId' => $user->id,
                         'userName' => $user->name,
-                        'payment' => $user->paymentOfTheMonth()->amount?? 'FAIL'
+                        'payment' => $user->amount?? 'FAIL'
                     ];
                 }
                 // var_dump($user->salon()->ownerName()[0]->owner_name);
                 // ddd($info);
                 // exit();
-                $f = fopen($filename, 'w');
+                $f = fopen('php://output', 'w');
                 if($f) {
                     mb_convert_variables('SJIS', 'UTF-8', $head);
                     fputcsv($f, $head);
@@ -128,12 +126,7 @@
                 }
                 fclose($f);
             };
-
-            // $header['Content-Length'] = filesize(asset($filename));
-            // readfile(asset($filename));
-            // exit();
-
-            return response()->streamDownload($createCsv($filename), $filename, $header);
-            // return response()->make($filename, 200, $header);
+            // ddd($createCsv($filename));
+            return response()->make($createCsv($filename), 200, $header)->send();
         }
     }

@@ -12,7 +12,7 @@
         <p class="system__page-lead">総数：{{ count($owners) }}名</p>
         <form action="{{route('system.output')}}" method="get">
             {{-- <input type="hidden" name="owners[]" value="{{$owners}}"> --}}
-            <button type="submit" class="btn system_csv-btn">CSV出力</button>
+            <button type="submit" class="btn system_csv-btn">今月のデータをCSV出力</button>
         </form>
         <table class="system__owners-table">
             <tr class="table-head">
