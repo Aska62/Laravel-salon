@@ -61,6 +61,14 @@ class SystemController extends Controller
             'Content-Disposition' => 'attachment; filename='.$filename,
             'Pragma' => 'no-cache',
         ];
-        return response()->make($this->systemSer->createCsv($filename), 200, $header)->send();
+        // return response()->make($this->systemSer->createCsv($filename), 200, $header);
+        // return response()->streamDownload($this->systemSer->createCsv($filename), $filename, $header);
+        return response()->streamDownload(function() use ($filename) {
+            $this->systemSer->createCsv($filename);
+            },
+            $filename,
+            $header
+        );
     }
+
 }

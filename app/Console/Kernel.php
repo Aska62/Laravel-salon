@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AutoPayment;
+use App\Console\Commands\Test;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -13,18 +15,21 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        AutoPayment::class,
+        Test::class
     ];
 
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('command:autoPayment')
+            // ->everyMinute();
+            ->monthlyOn(1, '00:00');
     }
 
     /**

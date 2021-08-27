@@ -37,7 +37,6 @@ class sendEmail implements ShouldQueue
     public function handle()
     {
         Mail::send('emails.userWelcome', ['user' => $this->user], function($message){
-            var_dump('hi!');
             $message->to($this->user->email)
                 ->subject($this->user->salon->name."へようこそ！")
                 ->from(config('mail.from.address'));

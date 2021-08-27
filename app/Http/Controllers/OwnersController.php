@@ -3,15 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Services\OwnersService;
+use App\Services\ChargeService;
 use Illuminate\Http\Request;
 
 class OwnersController extends Controller
 {
     protected $request;
     protected $ownersSer;
+    protected $chargeSer;
 
-    public function __construct(OwnersService $ownersSer) {
+    public function __construct(OwnersService $ownersSer, ChargeService $chargeSer) {
         $this->ownersSer = $ownersSer;
+        $this->chargeSer = $chargeSer;
+    }
+
+
+    /**
+     * Test
+     *
+     * @return redirect
+     */
+    public function test() {
+        $this->chargeSer->chargeMonthlyPayment();
+        return redirect()->route('owner.create');
     }
 
     /**

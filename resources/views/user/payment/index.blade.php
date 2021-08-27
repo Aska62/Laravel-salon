@@ -12,9 +12,11 @@
         <p>{{date("Y")}}年{{date("m")}}月分：{{ $salon->fee }}円</p>
         <div class="payment_button-wrapper">
             <button class="btn back-btn" onclick="history.back()">戻る</button>
+            <script src="https://js.stripe.com/v3/"></script>
             <form action="{{ route('user.submit', ['salon_name' => $salon->name]) }}"
                 method="POST"
                 class="pay-btn-wrapper"
+                id="payment-form"
             >
                 {{ csrf_field() }}
                 <script
@@ -29,6 +31,7 @@
                     data-currency="JPY"
                 >
                 </script>
+                <input type="hidden" name="payment_method">
                 <input type="hidden" name="salon_id" value="{{ $salon->id }}">
                 <input type="hidden" name="fee" value="{{ $salon->fee }}">
                 <input type="hidden" name="user_name" value="{{ $user_name }}">

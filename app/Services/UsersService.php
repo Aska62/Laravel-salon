@@ -107,48 +107,42 @@
         }
 
         /**
-         * Make a payment
+         * Make an INITIAL payment
          *
          * @param Request $request
-         *
+         * @return Stripe\Customer
          */
         public function pay(Request $request) {
             Stripe::setApiKey(env('STRIPE_SECRET'));
+            $customer = \Stripe\Customer::create([
+                'name' => $request->user_name,
+                'email' => $request->user_email,
+                'source'=> $request->stripeToken
+            ]);
+
             $charge = Charge::create(array(
                 'amount' => $request->fee,
                 'currency' => 'jpy',
-                'source'=> $request->stripeToken
+                'customer'=> $customer->id
             ));
+
+            return $customer;
         }
 
         /**
-         * Register as a Stripe customer
-         * これいらなかった
-         */
-        public function createStripeCustomer(Request $request) {
-            $user->createAsStripeCustomer([
-                "name" => $request->user_name,
-                "description" => $request->salon_id,
-                "source" => $request->stripeToken
-            ]);
-        }
-
-        /**
-         * Register new user to db
+         * Register news user to db
          *
          * @param Request $request
          *
          */
-        public function registerUser(Request $request) {
+        public function registerUser(Request $request, $customer) {
             $user = User::create([
                 'name' => $request->user_name,
                 'email' => $request->user_email,
                 'salon_id' => $request->salon_id,
+                'stripe_id' => $customer->id,
                 'created_at' => now()
             ]);
-            if(!$user->hasStripeId()){
-                $user->createAsStripeCustomer();
-            }
         }
 
         /**
@@ -178,7 +172,7 @@
          *
          * @param String $user_email, $Int salon_id
          *
-         * @return App/Models/User
+         * @return App\Models\User
          */
         public function getUserByEmail($user_email, $salon_id) {
             return User::where('email', $user_email)
@@ -187,6 +181,17 @@
                 ->firstOrFail();
         }
 
+        /**
+         * Find user by id
+         *
+         * @param int $user_id
+         *
+         * @return App\Models\User
+         */
+        public function getUserById($user_id) {
+            return User::where('id', $user_id)
+                ->firstOrFail();
+        }
         /**
          * Get owner info salon id
          *

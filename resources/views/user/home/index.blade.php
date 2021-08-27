@@ -7,13 +7,12 @@
     <!-- コンテンツヘッダ -->
     <section class="content-header">
         <div class="user__top-image"
-            alt="ようこそみんなのサロンへ">
+        alt="ようこそみんなのサロンへ"
+        >
     </section>
     <!-- メインコンテンツ -->
     <section class="content users__home-content">
         <p class="user-home-lead">あなたにぴったりのオンラインサロンを見つけましょう！</p>
-        @foreach($salons as $salon)
-        @endforeach
         <ul class="salon-list_container">
             @foreach($salons as $salon)
                 <a href="{{ route('user.detail', ['name' => $salon->name]) }}">

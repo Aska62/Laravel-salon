@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Salon;
 use App\Models\Payment;
 use Laravel\Cashier\Billable;
+use Stripe\Stripe;
 
 class User extends Model
 {
@@ -26,7 +27,8 @@ class User extends Model
         'id',
         'name',
         'email',
-        'salon_id'
+        'salon_id',
+        'stripe_id'
     ];
     public function salon()
     {
@@ -49,4 +51,10 @@ class User extends Model
             ->where('created_at', '>=', strtotime(date('Ym').'01 00:00:00'))
             ->first();
     }
+
+    // public function setStripeCustomer($token, $user)
+    // {
+    //     Stripe::setApiKey(env('STRIPE_SECRET'));
+
+    // }
 }

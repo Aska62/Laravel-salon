@@ -3,20 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Services\UsersService;
+use App\Services\ChargeService;
 use App\Jobs\sendEmail;
 use App\Jobs\SendEmailToOwner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
     protected $request;
-    protected $salonSer;
-    protected $paymentSer;
+    protected $chargeSer;
     protected $userSer;
     protected $sendEmail;
 
-    public function __construct(usersService $usersSer) {
+    public function __construct(usersService $usersSer, ChargeService $chargeSer) {
         $this->usersSer = $usersSer;
+        $this->chargeSer = $chargeSer;
     }
 
     /**
@@ -25,7 +27,6 @@ class UsersController extends Controller
      * @return view
      */
     public function home() {
-        $salons = $this->usersSer->getAllSalons();
         return view('user.home.index', [
             'salons' => $this->usersSer->getAllSalons()
         ]);
@@ -69,7 +70,7 @@ class UsersController extends Controller
         return view('user.payment.index', [
             'salon' => $this->usersSer->getSalonById($request->salon_id),
             'user_name' => $request->name,
-            'user_email' => $request->email
+            'user_email' => $request->email,
         ]);
     }
 
@@ -82,8 +83,8 @@ class UsersController extends Controller
      */
     public function submit(Request $request) {
         $yearMonth = (int)(date("Y").date("m"));
-        $this->usersSer->pay($request);
-        $this->usersSer->registerUser($request);
+        $customer = $this->usersSer->pay($request);
+        $this->usersSer->registerUser($request, $customer);
         $this->usersSer->registerPayment($request);
 
         $user = $this->usersSer->getUserByEmail($request->user_email, $request->salon_id);
@@ -93,7 +94,8 @@ class UsersController extends Controller
         SendEmailToOwner::dispatch($owner, $user);
 
         return redirect()->route('user.welcome', [
-            'salon_name' => $this->usersSer->getSalonById($request->salon_id)->name
+            'salon_name' => $this->usersSer->getSalonById($request->salon_id)->name,
+            'user' => $user
         ]);
     }
 
@@ -104,8 +106,24 @@ class UsersController extends Controller
      * @return view
      */
     public function welcome(Request $request) {
+        $user = $this->usersSer->getUserById($request->user);
         return view('user.welcome.index', [
-            'salon_name' => $request->salon_name
+            'salon_name' => $request->salon_name,
+            'user' => $user->name,
+            // 'intent' => $user->createSetupIntent()
         ]);
+    }
+
+    /**
+     * Registe payment method
+     *
+     * @param Request $request
+     * @return view
+     */
+    public function addPaymentMethod(Request $request) {
+        $user = $this->usersSer->getUserById($request->user_id);
+        $user->updateDefaultPaymentMethod($request->payment_method);
+        // $user->newSubscriptiuon('default', )
+        return view('user.addPaymentMethod.index');
     }
 }

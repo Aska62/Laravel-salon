@@ -8,6 +8,9 @@
     use DB;
     use Illuminate\Http\Request;
     use Illuminate\Pagination\Paginator;
+    use Laravel\Cashier\Cashier;
+    use Stripe\Stripe;
+    use Stripe\Charge;
 
     class SystemService
     {
@@ -83,6 +86,7 @@
                 $join->on('users.id', '=', 'payments.user_id')
                     ->where('payments.payment_for', date('Ym'));
                 })
+                ->whereNotNull('users.salon_id')
                 ->whereNull('users.deleted_at')
                 ->orWhere('users.deleted_at', '>=', strtotime(date('Ym').'01 00:00:00'))
                 ->orderBy('users.salon_id', 'asc')
@@ -95,17 +99,15 @@
             foreach($users as $user) {
                 $info[] = [
                     'salon_id' => $user->salon_id?? 'NULL',
-                    'salon_name' => $user->getSalon()->name?? 'NULL',
-                    'owner_name' => $user->getSalon()->ownerName()[0]->owner_name,
-                    'facebook' => $user->getSalon()->facebook?? 'NULL',
+                    'salon_name' => $user->salon->name?? 'NULL',
+                    'owner_name' => $user->salon->owner->owner_name ?? 'NULL',
+                    'facebook' => $user->salon->facebook?? 'NULL',
                     'userId' => $user->id,
                     'userName' => $user->name,
                     'payment' => $user->amount?? 'FAIL'
                 ];
             }
-            // var_dump($user->salon()->ownerName()[0]->owner_name);
-            // ddd($info);
-            // exit();
+
             $f = fopen('php://output', 'w');
             if($f) {
                 mb_convert_variables('SJIS', 'UTF-8', $head);
@@ -116,5 +118,31 @@
                 }
             }
             fclose($f);
+        }
+
+        /**
+         * Make monthly payment
+         *
+         * @param Request $request
+         *
+         */
+        public function payMonthly() {
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+            // get user id, salon id => salon fee
+            $users = User::with('salon')
+                ->where('created_at', '<', strtotime(date('Ym').'01 00:00:00'))
+                ->where('deleted_at', 'NULL')
+                ->get();
+            foreach($users as $user) {
+                // get stripe customer info
+                if($user->stripe_id) {
+                    Cashier::findBillable($user->stripe_id);
+                }
+            }
+            $charge = Charge::create(array(
+                'amount' => $request->fee,
+                'currency' => 'jpy',
+                'source'=> $request->stripeToken
+            ));
         }
     }
