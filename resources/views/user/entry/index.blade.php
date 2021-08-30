@@ -46,6 +46,7 @@
                     class="entry-input"
                 >
             </div>
+            <span class="error-msg error-msg_entry">{{ session('message') }}</span>
             @if($errors->has('email'))
                 <span class="error-msg error-msg_entry">{{ $errors->first('email')}}</span>
             @endif

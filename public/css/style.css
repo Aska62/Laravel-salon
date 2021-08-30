@@ -143,7 +143,6 @@ input:focus, textarea:focus {
     padding: 0;
 }
 .salon-list-item {
-    /* background-color: aqua; */
     width: 280px;
     height: 480px;
     margin-bottom: 70px;
@@ -160,12 +159,18 @@ input:focus, textarea:focus {
 }
 .list_salon-image {
     width: 280px;
-    /* height: 200px; */
     background-size: 100%;
     display: block;
 }
 .salon-list_text-wrapper {
     width: 100%;
+}
+.user_paginate-top {
+    width: fit-content;
+    margin: 0 auto;
+}
+.paginate_bottom-user {
+    margin-bottom: 30px;
 }
 
 /* Detail page */
@@ -236,20 +241,20 @@ input:focus, textarea:focus {
     justify-content: center;
     margin-bottom: 60px;
 }
-.entry-btn, .entry-submit-btn, .to-owner-top-btn {
+.entry-btn, .entry-submit-btn, .to-owner-top-btn, .salon-create-btn, .owner_back-btn {
     background-color:rgba(238, 245, 32, .4);
 }
-.entry-btn:hover, .entry-submit-btn:hover, .to-owner-top-btn:hover {
+.entry-btn:hover, .entry-submit-btn:hover, .to-owner-top-btn:hover, .salon-create-btn:hover, .owner_back-btn:hover {
     background-color:rgba(238, 245, 32, 1);
 }
 .entry-btn_center {
     margin-left: 12px;
 }
-.to-home-btn, .salon-register-btn, .to-create-salon-btn, .system_csv-btn {
+.to-home-btn, .salon-register-btn, .to-create-salon-btn, .system_csv-btn, .search-btn {
     margin-right: 12px;
     background-color: rgba(247, 182, 96, .4);
 }
-.to-home-btn:hover, .salon-register-btn:hover, .to-create-salon-btn:hover, .system_csv-btn:hover {
+.to-home-btn:hover, .salon-register-btn:hover, .to-create-salon-btn:hover, .system_csv-btn:hover, .search-btn:hover {
     background-color: rgba(247, 182, 96, 1);
 }
 /* entry page */
@@ -345,6 +350,47 @@ input:focus, textarea:focus {
 }
 
 /* OWNERS */
+/* Home */
+.owner__home-content, .owner_home-search-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+.salon-create-btn {
+    margin: 20px auto 20px auto;
+}
+.owner__search-form {
+    height: 100px;
+    margin-bottom: 20px;
+}
+.search-btn {
+    width: 50px;
+    height: 30px;
+}
+.error-msg_search {
+    margin-top: 8px;
+}
+.search-label {
+    font-size: 14px;
+}
+.search-result-elem {
+    height: 200px;
+    margin-bottom: 50px;
+    padding-right: 20px;
+    display: flex;
+    box-shadow: 5px 8px 5px rgba(29, 33, 33, .3);
+}
+.search_salon-image-box {
+    width: 240px;
+    height: 200px;
+    margin-right: 20px;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.search_salon-image {
+    height: 100%;
+}
+
 /* Salon registration */
 .owner__create-content {
     width: 100%;
@@ -395,11 +441,10 @@ input:focus, textarea:focus {
     width: 300px;
 }
 .owner__btn-wrapper {
-    width: 100%;
+    width: 360px;
     display: flex;
     align-items: center;
-}
-.salon-register-btn {
+    justify-content: space-around;
     margin: 26px auto 30px auto;
 }
 

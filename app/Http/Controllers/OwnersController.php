@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\OwnersService;
 use App\Services\ChargeService;
+use App\Http\Requests\SalonRequest;
 use Illuminate\Http\Request;
 
 class OwnersController extends Controller
@@ -17,17 +18,6 @@ class OwnersController extends Controller
         $this->chargeSer = $chargeSer;
     }
 
-
-    /**
-     * Test
-     *
-     * @return redirect
-     */
-    public function test() {
-        $this->chargeSer->chargeMonthlyPayment();
-        return redirect()->route('owner.create');
-    }
-
     /**
      * Display home
      *
@@ -38,6 +28,11 @@ class OwnersController extends Controller
         $salons = [];
         if($email) {
             $salons = $this->ownersSer->searchSalons($email);
+            if(!$salons) {
+                return redirect()
+                    ->route('owner.home')
+                    ->with('message', 'このアドレスに該当するサロンはありません。');
+            }
         }
         return view('owner.ownerHome.index', [
             'email' => $email,
@@ -59,12 +54,12 @@ class OwnersController extends Controller
      *
      * @return view
      */
-    public function addSalon(Request $request) {
-        $this->ownersSer->validate($request);
-        if($this->ownersSer->isNewOwner($request->email)) {
-            $this->ownersSer->storeOwner($request);
+    public function addSalon(SalonRequest $request) {
+        $data = $request->except('_token');
+        if($this->ownersSer->isNewOwner($data['email'])) {
+            $this->ownersSer->storeOwner($data);
         }
-        $owner_id = $this->ownersSer->findOwnerIdByEmail($request->email);
+        $owner_id = $this->ownersSer->findOwnerIdByEmail($data['email']);
         $this->ownersSer->storeSalon($request, $owner_id);
 
         return redirect()->route('owner.thanks');

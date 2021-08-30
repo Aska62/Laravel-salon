@@ -3,20 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\User;
-use App\Models\Payment;
-use Stripe\Stripe;
-use Stripe\Charge;
 use App\Services\ChargeService;
 
 
 class AutoPayment extends Command
 {
     protected $chargeSer;
-
-    // public function __construct(ChargeService $chargeSer) {
-    //     $this->chargeSer = $chargeSer;
-    // }
 
     /**
      * The name and signature of the console command.

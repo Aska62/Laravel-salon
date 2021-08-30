@@ -22,7 +22,6 @@ Route::get('{name}/entry', [UsersController::class, 'entry'])->name('user.entry'
 Route::post('{salon_name}/payment', [UsersController::class, 'payment'])->name('user.payment');
 Route::post('{salon_name}/submit', [UsersController::class, 'submit'])->name('user.submit');
 Route::get('{salon_name}/welcome', [UsersController::class, 'welcome'])->name('user.welcome');
-Route::post('{salon_name}/{user_id}/addPayment', [UsersController::class, 'addPaymentMethod'])->name('user.addPayment');
 
 Route::prefix('owners')->group(function() {
     Route::get('home', [OwnersController::class, 'ownerHome'])->name('owner.home');

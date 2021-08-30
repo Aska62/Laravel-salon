@@ -41,16 +41,12 @@ class Salon extends Model
         return $this->belongsTo(Owner::class);
     }
 
-    public function ownerName() {
-        return $this->owner()->select('owner_name')->get();
-    }
-
-    public function getOnwerEmail() {
-        return $this->owner()->select('email')->get();
-    }
-
-    public function user() {
+    public function users() {
         return $this->hasMany(User::class)->whereNull('deleted_at');
+    }
+
+    public function getAllUsers() {
+        return $this->users()->get();
     }
 
     public function deletedUser() {
@@ -58,7 +54,7 @@ class Salon extends Model
     }
 
     public function countUsers() {
-        return $this->user()->count();
+        return $this->users()->count();
     }
 
     public function countInactiveUsers() {

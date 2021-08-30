@@ -35,10 +35,10 @@ class User extends Model
         return $this->belongsTo(Salon::class);
     }
 
-    public function getSalon()
-    {
-        return $this->salon()->first();
-    }
+    // public function getSalon()
+    // {
+    //     return $this->salon()->first();
+    // }
 
     public function payment()
     {
@@ -51,10 +51,4 @@ class User extends Model
             ->where('created_at', '>=', strtotime(date('Ym').'01 00:00:00'))
             ->first();
     }
-
-    // public function setStripeCustomer($token, $user)
-    // {
-    //     Stripe::setApiKey(env('STRIPE_SECRET'));
-
-    // }
 }

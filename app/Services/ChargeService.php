@@ -1,8 +1,6 @@
 <?php
     namespace App\Services;
 
-    use App\Models\Owner;
-    use App\Models\Salon;
     use App\Models\User;
     use App\Models\Payment;
     use Illuminate\Http\Request;
@@ -29,7 +27,6 @@
                     $this->sendEmailToUser($user);
                     $this->sendEmailToOwner($user);
                 } else {
-                    // dd($user);
                     $customer;
                     try {
                         $customer = \Stripe\Customer::retrieve($user->stripe_id);
@@ -42,7 +39,7 @@
                         $this->sendEmailToOwner($user);
                     }
                     try {
-                        $amount = $user->getSalon()->fee;
+                        $amount = $user->salon->fee;
                         $charge = Charge::create(array(
                             'amount' => $amount,
                             'currency' => 'jpy',
@@ -52,14 +49,12 @@
                         $yearMonth = (int)(date("Y").date("m"));
                         Payment::insert([
                             'amount' => $amount,
-                            'salon_id' => $user->getSalon()->id,
+                            'salon_id' => $user->salon->id,
                             'user_id' => $user->id,
                             'payment_for' => $yearMonth,
                             'created_at' => now()
                         ]);
                     } catch ( Exception $e ){
-                        // report($e);
-                        // session()->flash('flash_message', 'なんか失敗！');
                         // send email to user and owner
                         $this->sendEmailToUser($user);
                         $this->sendEmailToOwner($user);
@@ -74,7 +69,6 @@
          * @param App\Models\User $user
          */
         public function sendEmailToUser(User $user) {
-            // dd($user->email);
             Mail::send('emails.errorMsgToUser', ['user' => $user], function($message) use ($user) {
                 $message->to($user->email)
                     ->subject($user->salon->name." ".date('m')."月会費の支払いが完了できませんでした")

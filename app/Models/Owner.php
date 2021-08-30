@@ -39,10 +39,6 @@ class Owner extends Model
         return $this->hasMany(Salon::class)->whereNotNull('deleted_at');
     }
 
-    // public function countSalons() {
-    //     return $this->activeSalon()->count();
-    // }
-
     public function countFollwers() {
         $salons = $this->activeSalon();
         $followers = 0;
@@ -53,17 +49,17 @@ class Owner extends Model
     }
 
     // これ不要か
-    public function countInactiveFollowers() {
-        $salons = $this->salon()->get();
-        $deletedSalons = $this->deletedSalon()->get();
-        $inactives = 0;
-        foreach ($salons as $salon ) {
-            $inactives+= $salon->countInactiveUsers();
-        }
-        foreach ($deletedSalons as $dSalon) {
-            $inactives += $dSalon->countUsers();
-            $inactives += $dSalon->countInactiveUsers();
-        }
-        return $inactives;
-    }
+    // public function countInactiveFollowers() {
+    //     $salons = $this->salon()->get();
+    //     $deletedSalons = $this->deletedSalon()->get();
+    //     $inactives = 0;
+    //     foreach ($salons as $salon ) {
+    //         $inactives+= $salon->countInactiveUsers();
+    //     }
+    //     foreach ($deletedSalons as $dSalon) {
+    //         $inactives += $dSalon->countUsers();
+    //         $inactives += $dSalon->countInactiveUsers();
+    //     }
+    //     return $inactives;
+    // }
 }

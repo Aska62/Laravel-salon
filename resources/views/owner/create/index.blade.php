@@ -113,7 +113,7 @@
                 </div>
             </div>
             <div class="salon-form-elem">
-                <label for="recommend" class="salon-form-label">こんな人におすすめ：</label>
+                <label for="recommend" class="salon-form-label">こんな方におすすめ：</label>
                 <div class="owner_input-field-box">
                     <textarea
                         id="recommend"
@@ -191,7 +191,7 @@
             </div>
         </div>
         <div class="owner__btn-wrapper">
-            {{-- <button type="button" class="btn back-btn" onclick="history.back()">戻る</button> --}}
+            <button type="button" class="btn owner_back-btn" onclick="history.back()">戻る</button>
             <button type="submit" class="btn salon-register-btn">登録</button>
         </div>
     </form>

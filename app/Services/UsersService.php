@@ -5,10 +5,9 @@
     use App\Models\Salon;
     use App\Models\Owner;
     use App\Models\Payment;
-    use DB;
 
     use Illuminate\Http\Request;
-    use Illuminate\Validation\Rule;
+    use Illuminate\Pagination\Paginator;
     use Illuminate\Support\Facades\Auth;
     use Laravel\Cashier\Cashier;
     use Stripe\Stripe;
@@ -19,91 +18,61 @@
         public function boot(){
             Cashier::useCustomerModel(User::class);
         }
+
         /**
          * Get all available salons. Order: from new to old
          *
          * @return App\Models\Salon
          */
         public function getAllSalons() {
+            Paginator::useBootstrap();
             return Salon::whereNull('deleted_at')
                 ->with('owner')
                 ->orderBy('created_at', 'desc')
-                ->get();
+                ->paginate(12);
         }
 
         /**
          * Get salon info by id
          *
-         * @param String $salon_id
+         * @param Int $salon_id
          *
          * @return App\Models\Salon
          */
-        public function getSalonById(String $salon_id) {
+        public function getSalonById(Int $salon_id) {
             return Salon::findOrFail($salon_id);
-        }
-
-        /**
-         * Get salon info by name
-         *
-         * @param String $salon_name
-         *
-         * @return App\Models\Salon
-         */
-        public function getSalonByName(String $salon_name) {
-            return Salon::where('name', $salon_name)->firstOrFail();
         }
 
         /**
          * Check if the user is new to the salon
          *
-         * @param Array $salon String $user_email
+         * @param App\Models\Salon $salon String $user_email
          *
          * @return Boolean
          */
-        public function isNewUser(Array $salon, String $user_email) {
-            $users = $salon->user();
+        public function isNewUser(Salon $salon, String $user_email) {
+            $users = $salon->getAllUsers();
             foreach($users as $user) {
                 if($user->email == $user_email) {
                     return false;
-                } else {
-                    return true;
                 }
             }
+            return true;
         }
 
         /**
          * Check if the user is not the salon owner
          *
-         * @param App/Models/Salon $salon String $user_email
+         * @param App\Models\Salon $salon String $user_email
          *
          * @return Boolean
          */
-        public function isOwner(Array $salon, String $user_email) {
+        public function isOwner(Salon $salon, String $user_email) {
             if($salon->owner->email == $user_email) {
                 return true;
             } else {
                 return false;
             }
-        }
-
-        /**
-         * Validate new user data
-         *
-         * @param Request $request
-         *
-         */
-        public function validateUser(Request $request) {
-            $validatedData = $request->validate([
-                'name' => 'required',
-                'email' => [
-                    'required',
-                    Rule::unique('users', 'email')
-                        ->where('salon_id', $request->email)
-                        ->whereNull('deleted_at'),
-                    Rule::unique('owners', 'email')
-                        ->where('id', $request->owner_id)
-                ]
-            ]);
         }
 
         /**
@@ -133,7 +102,7 @@
          * Register news user to db
          *
          * @param Request $request
-         *
+         * @return App\Models\User $user
          */
         public function registerUser(Request $request, $customer) {
             $user = User::create([
@@ -143,6 +112,7 @@
                 'stripe_id' => $customer->id,
                 'created_at' => now()
             ]);
+            return $user;
         }
 
         /**
@@ -166,21 +136,6 @@
             ]);
         }
 
-
-        /**
-         * Get user info by name and salon id
-         *
-         * @param String $user_email, $Int salon_id
-         *
-         * @return App\Models\User
-         */
-        public function getUserByEmail($user_email, $salon_id) {
-            return User::where('email', $user_email)
-                ->where('salon_id', $salon_id)
-                ->whereNull('deleted_at')
-                ->firstOrFail();
-        }
-
         /**
          * Find user by id
          *
@@ -192,12 +147,13 @@
             return User::where('id', $user_id)
                 ->firstOrFail();
         }
+
         /**
          * Get owner info salon id
          *
          * @param String salon_id
          *
-         * @return App/Models/Owner
+         * @return App\Models\Owner
          */
         public function getOwnerBySalonId($salon_id) {
             $salon = $this->getSalonById($salon_id);

@@ -119,30 +119,4 @@
             }
             fclose($f);
         }
-
-        /**
-         * Make monthly payment
-         *
-         * @param Request $request
-         *
-         */
-        public function payMonthly() {
-            Stripe::setApiKey(env('STRIPE_SECRET'));
-            // get user id, salon id => salon fee
-            $users = User::with('salon')
-                ->where('created_at', '<', strtotime(date('Ym').'01 00:00:00'))
-                ->where('deleted_at', 'NULL')
-                ->get();
-            foreach($users as $user) {
-                // get stripe customer info
-                if($user->stripe_id) {
-                    Cashier::findBillable($user->stripe_id);
-                }
-            }
-            $charge = Charge::create(array(
-                'amount' => $request->fee,
-                'currency' => 'jpy',
-                'source'=> $request->stripeToken
-            ));
-        }
     }

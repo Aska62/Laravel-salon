@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\UsersService;
 use App\Services\ChargeService;
+use App\Http\Requests\UserRequest;
 use App\Jobs\sendEmail;
 use App\Jobs\SendEmailToOwner;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class UsersController extends Controller
      */
     public function detail(Request $request) {
         return view('user.detail.index', [
-            'salon' => $this->usersSer->getSalonByName($request->name)
+            'salon' => $this->usersSer->getSalonById($request->id)
         ]);
     }
 
@@ -61,16 +62,34 @@ class UsersController extends Controller
     /**
      * Validate user info and display payment page
      *
-     * @param Request $request
+     * @param UserRequest $request
      *
      * @return view
      */
-    public function payment(Request $request) {
-        $this->usersSer->validateUser($request);
+    public function payment(UserRequest $request) {
+        // validate
+        $data = $request->except('_token');
+
+        // check if the email is unique to the salon
+        $salon = $this->usersSer->getSalonById($request->salon_id);
+        if($request->email) {
+            $isNewUser = $this->usersSer->isNewUser($salon, $request->email);
+            $isOwner = $this->usersSer->isOwner($salon, $request->email);
+            if(!$isNewUser) {
+                return back()
+                    ->withInput()
+                    ->with('message', 'このメールアドレスは登録済みです。');
+            } elseif($isOwner) {
+                return back()
+                    ->withInput()
+                    ->with('message', 'このアドレスはサロンオーナーと同一です。');
+            }
+        }
+
         return view('user.payment.index', [
-            'salon' => $this->usersSer->getSalonById($request->salon_id),
-            'user_name' => $request->name,
-            'user_email' => $request->email,
+            'salon' => $salon,
+            'user_name' => $data['name'],
+            'user_email' => $data['email'],
         ]);
     }
 
@@ -82,14 +101,15 @@ class UsersController extends Controller
      * @return redirect
      */
     public function submit(Request $request) {
-        $yearMonth = (int)(date("Y").date("m"));
+        // Register as a Stripe custoer
         $customer = $this->usersSer->pay($request);
-        $this->usersSer->registerUser($request, $customer);
+
+        // Register as a new salon member
+        $user = $this->usersSer->registerUser($request, $customer);
         $this->usersSer->registerPayment($request);
 
-        $user = $this->usersSer->getUserByEmail($request->user_email, $request->salon_id);
+        // Send emails to user and salon owner
         $owner = $this->usersSer->getOwnerBySalonId($request->salon_id);
-
         SendEmail::dispatch($user);
         SendEmailToOwner::dispatch($owner, $user);
 
@@ -109,21 +129,7 @@ class UsersController extends Controller
         $user = $this->usersSer->getUserById($request->user);
         return view('user.welcome.index', [
             'salon_name' => $request->salon_name,
-            'user' => $user->name,
-            // 'intent' => $user->createSetupIntent()
+            'user' => $user->name
         ]);
-    }
-
-    /**
-     * Registe payment method
-     *
-     * @param Request $request
-     * @return view
-     */
-    public function addPaymentMethod(Request $request) {
-        $user = $this->usersSer->getUserById($request->user_id);
-        $user->updateDefaultPaymentMethod($request->payment_method);
-        // $user->newSubscriptiuon('default', )
-        return view('user.addPaymentMethod.index');
     }
 }
