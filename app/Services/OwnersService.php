@@ -51,7 +51,6 @@
          *
          * @param Array $data
          *
-         * @return $owner_id
          */
         public function storeOwner(Array $data) {
             Owner::insert([

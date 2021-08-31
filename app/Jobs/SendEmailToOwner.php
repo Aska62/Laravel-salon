@@ -26,9 +26,8 @@ class SendEmailToOwner implements ShouldQueue
      * @param App\Models\User
      * @return void
      */
-    public function __construct(Owner $owner, User $user)
+    public function __construct(User $user)
     {
-        $this->owner = $owner;
         $this->user = $user;
     }
 
@@ -39,9 +38,8 @@ class SendEmailToOwner implements ShouldQueue
      */
     public function handle()
     {
-        // what we need: owner email, owner name, salon name, user name, user email
-        Mail::send('emails.noticeToOwner', ['owner' => $this->owner, 'user' => $this->user], function($message){
-            $message->to($this->owner->email)
+        Mail::send('emails.noticeToOwner', ['user' => $this->user], function($message) {
+            $message->to($this->user->salon->owner->email)
                 ->subject($this->user->salon->name."に新しい会員が参加しました")
                 ->from(config('mail.from.address'));
         });

@@ -47,19 +47,4 @@ class Owner extends Model
         }
         return $followers;
     }
-
-    // これ不要か
-    // public function countInactiveFollowers() {
-    //     $salons = $this->salon()->get();
-    //     $deletedSalons = $this->deletedSalon()->get();
-    //     $inactives = 0;
-    //     foreach ($salons as $salon ) {
-    //         $inactives+= $salon->countInactiveUsers();
-    //     }
-    //     foreach ($deletedSalons as $dSalon) {
-    //         $inactives += $dSalon->countUsers();
-    //         $inactives += $dSalon->countInactiveUsers();
-    //     }
-    //     return $inactives;
-    // }
 }

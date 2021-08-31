@@ -57,13 +57,13 @@
          *
          * @return App\Models\Payments
          */
-        public function getMonthlyPayment() {
-            return Payment::select(DB::raw('payment_for, COUNT(id) as total_users, SUM(amount) as total_amount'))
-                ->groupBy('payment_for')
-                ->orderBy('payment_for', 'desc')
-                ->limit(12)
-                ->get();
-        }
+        // public function getMonthlyPayment() {
+        //     return Payment::select(DB::raw('payment_for, COUNT(id) as total_users, SUM(amount) as total_amount'))
+        //         ->groupBy('payment_for')
+        //         ->orderBy('payment_for', 'desc')
+        //         ->limit(12)
+        //         ->get();
+        // }
 
         /**
          * Output salon info to CSV

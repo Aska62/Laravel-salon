@@ -56,6 +56,7 @@ class OwnersController extends Controller
      */
     public function addSalon(SalonRequest $request) {
         $data = $request->except('_token');
+        // If the owner is new, register
         if($this->ownersSer->isNewOwner($data['email'])) {
             $this->ownersSer->storeOwner($data);
         }

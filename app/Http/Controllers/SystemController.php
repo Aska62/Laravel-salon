@@ -15,7 +15,7 @@ class SystemController extends Controller
     }
 
     /**
-     * Display system top
+     * Display system top - onwer list
      *
      * @return view
      */
@@ -43,14 +43,14 @@ class SystemController extends Controller
      *
      * @return view
      */
-    public function paymentHistory() {
-        return view('system.payments.index', [
-            'payments' => $this->systemSer->getMonthlyPayment()
-        ]);
-    }
+    // public function paymentHistory() {
+    //     return view('system.payments.index', [
+    //         'payments' => $this->systemSer->getMonthlyPayment()
+    //     ]);
+    // }
 
     /**
-     * Output owners info to CSV
+     * Output info to CSV
      *
      * @return response
      */

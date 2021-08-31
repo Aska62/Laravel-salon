@@ -8,7 +8,6 @@ use App\Services\ChargeService;
 
 class AutoPayment extends Command
 {
-    protected $chargeSer;
 
     /**
      * The name and signature of the console command.
@@ -23,6 +22,8 @@ class AutoPayment extends Command
      * @var string
      */
     protected $description = 'Auto monthly payment';
+
+    protected $chargeSer;
 
     /**
      * Create a new command instance.

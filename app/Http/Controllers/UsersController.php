@@ -111,7 +111,7 @@ class UsersController extends Controller
         // Send emails to user and salon owner
         $owner = $this->usersSer->getOwnerBySalonId($request->salon_id);
         SendEmail::dispatch($user);
-        SendEmailToOwner::dispatch($owner, $user);
+        SendEmailToOwner::dispatch($user);
 
         return redirect()->route('user.welcome', [
             'salon_name' => $this->usersSer->getSalonById($request->salon_id)->name,

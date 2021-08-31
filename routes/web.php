@@ -17,8 +17,8 @@ use App\Http\Controllers\SystemController;
 */
 
 Route::get('/', [UsersController::class, 'home'])->name('user.home');
-Route::get('{name}', [UsersController::class, 'detail'])->name('user.detail');
-Route::get('{name}/entry', [UsersController::class, 'entry'])->name('user.entry');
+Route::get('{salon_name}', [UsersController::class, 'detail'])->name('user.detail');
+Route::get('{salon_name}/entry', [UsersController::class, 'entry'])->name('user.entry');
 Route::post('{salon_name}/payment', [UsersController::class, 'payment'])->name('user.payment');
 Route::post('{salon_name}/submit', [UsersController::class, 'submit'])->name('user.submit');
 Route::get('{salon_name}/welcome', [UsersController::class, 'welcome'])->name('user.welcome');

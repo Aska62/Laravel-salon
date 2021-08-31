@@ -17,7 +17,7 @@
         @if($salon->countUsers() < $salon->max_members)
             <form
                 class="detail_top-button-box"
-                action="{{ route('user.entry', ['name' => $salon->name ]) }}"
+                action="{{ route('user.entry', ['salon_name' => $salon->name ]) }}"
             >
                 <input type="hidden" name="id" value="{{ $salon->id }}">
                 <button type="submit" class="btn entry-btn">入会する</button>
@@ -54,7 +54,7 @@
             <button type="button" class="btn to-home-btn">ホームへ戻る</button>
         </a>
         @if($salon->countUsers() < $salon->max_members)
-            <form action="{{ route('user.entry', ['name' => $salon->name ]) }}">
+            <form action="{{ route('user.entry', ['salon_name' => $salon->name ]) }}">
                 <input type="hidden" name="id" value="{{ $salon->id }}">
                 <button type="submit" class="btn entry-btn entry-btn_center">入会する</button>
             </form>

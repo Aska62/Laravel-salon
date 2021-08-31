@@ -35,11 +35,6 @@ class User extends Model
         return $this->belongsTo(Salon::class);
     }
 
-    // public function getSalon()
-    // {
-    //     return $this->salon()->first();
-    // }
-
     public function payment()
     {
         return $this->hasMany(Payment::class);

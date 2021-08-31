@@ -14,6 +14,8 @@
     {
         /**
          * Charge monthly payment to all existing users
+         *
+         * @return void
          */
         public function chargeMonthlyPayment() {
             $users = User::whereNull('deleted_at')
@@ -84,7 +86,7 @@
         public function sendEmailToOwner(User $user) {
             Mail::send('emails.errorMsgToOwner', ['user' => $user], function($message) use ($user){
                 $message->to($user->salon->owner->email)
-                    ->subject($user->salon->name."".date('m')."月会費の支払いについて")
+                    ->subject($user->salon->name." ".date('m')."月会費の支払いについて")
                     ->from(config('mail.from.address'));
             });
         }
