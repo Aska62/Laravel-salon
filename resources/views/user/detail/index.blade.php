@@ -25,7 +25,7 @@
         @endif
     </section>
     <section class="content users__detail-abstract">
-        <p>{{ $salon->abstract }}</p>
+        <p class="slon-desc-p">{{ $salon->abstract }}</p>
         <div class="detail-info-box">
             <p>会費： {{ $salon->fee }}円/1ヶ月</p>
             <p>会員数： {{ $salon->countUsers() }} 名 / {{ $salon->max_members }} 名</p>
@@ -34,17 +34,17 @@
     <section class="content users__detail-description">
         <div class="detail_recommend">
             <h3><i class="fa fa-solid fa-star"></i>こんな人にオススメ！</h3>
-            <p>{{ $salon->recommend }}</p>
+            <p class="slon-desc-p">{{ $salon->recommend }}</p>
         </div>
         <div class="detail_benefit">
             <h3><i class="fa fa-solid fa-star"></i>参加特典</h3>
-            <p>{{ $salon->benefit }}</p>
+            <p class="slon-desc-p">{{ $salon->benefit }}</p>
         </div>
     </section>
     <section class="content users__detail-owner">
         <h3><i class="fa fa-solid fa-star"></i>主催者について</h3>
         <p class="users__detail_owner-name">{{ $salon->owner->owner_name }}さん</p>
-        <p class="users__detail_owner-prof">{{ $salon->owner->profile }}</p>
+        <p class="users__detail_owner-prof slon-desc-p">{{ $salon->owner->profile }}</p>
     </section>
     @if($salon->countUsers() >= $salon->max_members)
         <p class="notice_salon-full salon-full_detail">会員数が定員に達しているため、新規入会は受け付けておりません。</p>

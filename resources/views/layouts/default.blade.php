@@ -30,7 +30,23 @@
         <a class="header__link" href="{{ route('owner.home')}}">
             オーナーの方
         </a>
+        <div class="mob__header-link">
+            <p class="mob-header-lead">メニュー</p>
+            <div class="hamburger-box">
+                <div class="hamburger-line hamburger-top"></div>
+                <div class="hamburger-line hamburger-middle"></div>
+                <div class="hamburger-line hamburger-bottom"></div>
+            </div>
+        </div>
     </header><!-- end header -->
+    <div class="mob__menu-box">
+        <a class="header__link-mob" href="{{route('user.home')}}">
+            ユーザーの方
+        </a>
+        <a class="header__link-mob" href="{{ route('owner.home')}}">
+            オーナーの方
+        </a>
+    </div>
 
     @yield('content')
 

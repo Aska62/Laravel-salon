@@ -6,7 +6,7 @@
 
     <!-- コンテンツヘッダ -->
     <section class="content-header">
-        <h2 class="content-lead">{{ $salon->name }} 初月会費のお支払い</h2>
+        <h2 class="content-lead payment-lead">{{ $salon->name }} 初月会費のお支払い</h2>
         <p>{{ $user_name }}様</p>
         {{-- <p>{{ $user_email }}</p> --}}
         <p>{{date("Y")}}年{{date("m")}}月分：{{ $salon->fee }}円</p>

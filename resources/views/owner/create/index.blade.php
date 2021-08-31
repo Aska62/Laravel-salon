@@ -84,7 +84,7 @@
             </div>
             <div class="salon-form-elem">
                 <label for="fee" class="salon-form-label">月会費：</label>
-                <div class="owner_input-field-box">
+                <div class="owner_input-field-box count-field-box">
                     <input
                         type="int"
                         id="fee"
@@ -94,10 +94,10 @@
                         value="{{ old('fee')?? '' }}"
                     >
                     <label for="fee" class="label-counter">円</label>
-                    @if($errors->has('fee'))
-                        <span class="error-msg">{{ $errors->first('fee')}}</span>
-                    @endif
                 </div>
+                @if($errors->has('fee'))
+                    <span class="error-msg">{{ $errors->first('fee')}}</span>
+                @endif
             </div>
             <div class="salon-form-elem">
                 <label for="abstract" class="salon-form-label">概要：</label>
@@ -166,10 +166,10 @@
                         value="{{ old('max_members')?? '' }}"
                     >
                     <label for="max_members" class="label-counter">人</label>
-                    @if($errors->has('max_members'))
-                        <span class="error-msg">{{ $errors->first('max_members')}}</span>
-                    @endif
                 </div>
+                @if($errors->has('max_members'))
+                    <span class="error-msg">{{ $errors->first('max_members')}}</span>
+                @endif
             </div>
             <div class="salon-form-elem">
                 <label for="image" class="salon-form-label">画像：</label>
