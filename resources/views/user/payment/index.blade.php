@@ -29,11 +29,10 @@
                     data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
                     data-locale="auto"
                     data-currency="JPY"
-                >
+                    >
                 </script>
                 <input type="hidden" name="payment_method">
                 <input type="hidden" name="salon_id" value="{{ $salon->id }}">
-                <input type="hidden" name="fee" value="{{ $salon->fee }}">
                 <input type="hidden" name="user_name" value="{{ $user_name }}">
                 <input type="hidden" name="user_email" value="{{ $user_email }}">
             </form>

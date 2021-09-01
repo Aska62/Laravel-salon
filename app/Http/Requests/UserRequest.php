@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Salon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\Request;
 
 class UserRequest extends FormRequest
 {
@@ -14,18 +16,31 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; //[ *1.変更：default=false ]
+        return true;
     }
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules(Request $request)
     {
         return [
             'name' => 'required',
-            'email' => 'required'
+            'email' => [
+                'required',
+                Rule::unique('users', 'email')->where(function($query) use($request) {
+                    $query->where('salon_id', $request->salon_id)
+                        ->whereNull('deleted_at');
+                }),
+                Rule::unique('owners', 'email')->where(function($query) use($request) {
+                    $query->where('id', [Salon::select('owner_id')
+                        ->where('id', $request->salon_id)
+                        ->whereNull('deleted_at')
+                        ->first()['owner_id']]
+                    );
+                })
+            ]
         ];
     }
     /**
@@ -39,5 +54,14 @@ class UserRequest extends FormRequest
             'email' => 'メールアドレス'
         ];
     }
-
+    /**
+     * Error messages
+     *
+     * @return array
+     */
+    public function messages() {
+        return [
+            'email:unique' => 'このメールアドレスは登録済みです。'
+        ];
+    }
 }

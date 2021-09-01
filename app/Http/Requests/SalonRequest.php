@@ -14,7 +14,7 @@ class SalonRequest extends FormRequest
      */
     public function authorize()
     {
-        return true; //[ *1.変更：default=false ]
+        return true;
     }
     /**
      * Get the validation rules that apply to the request.
@@ -62,6 +62,8 @@ class SalonRequest extends FormRequest
     }
     /**
      * Error messages
+     *
+     * @return array
      */
     public function messages() {
         return [

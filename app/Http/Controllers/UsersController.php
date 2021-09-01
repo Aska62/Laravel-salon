@@ -8,7 +8,6 @@ use App\Http\Requests\UserRequest;
 use App\Jobs\sendEmail;
 use App\Jobs\SendEmailToOwner;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -67,24 +66,11 @@ class UsersController extends Controller
      * @return view
      */
     public function payment(UserRequest $request) {
-        // validate
+        // validated data
         $data = $request->except('_token');
 
         // check if the email is unique to the salon
         $salon = $this->usersSer->getSalonById($request->salon_id);
-        if($request->email) {
-            $isNewUser = $this->usersSer->isNewUser($salon, $request->email);
-            $isOwner = $this->usersSer->isOwner($salon, $request->email);
-            if(!$isNewUser) {
-                return back()
-                    ->withInput()
-                    ->with('message', 'このメールアドレスは登録済みです。');
-            } elseif($isOwner) {
-                return back()
-                    ->withInput()
-                    ->with('message', 'このアドレスはサロンオーナーと同一です。');
-            }
-        }
 
         return view('user.payment.index', [
             'salon' => $salon,
@@ -109,9 +95,9 @@ class UsersController extends Controller
         $this->usersSer->registerPayment($request);
 
         // Send emails to user and salon owner
-        $owner = $this->usersSer->getOwnerBySalonId($request->salon_id);
+        // $owner = $this->usersSer->getOwnerBySalonId($request->salon_id);
         SendEmail::dispatch($user);
-        SendEmailToOwner::dispatch($user);
+        // SendEmailToOwner::dispatch($user);
 
         return redirect()->route('user.welcome', [
             'salon_name' => $this->usersSer->getSalonById($request->salon_id)->name,

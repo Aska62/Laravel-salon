@@ -2,16 +2,8 @@
     namespace App\Services;
 
     use App\Models\Owner;
-    use App\Models\Salon;
     use App\Models\User;
-    use App\Models\Payment;
-    use DB;
-    use Illuminate\Http\Request;
     use Illuminate\Pagination\Paginator;
-    use Laravel\Cashier\Cashier;
-    use Stripe\Stripe;
-    use Stripe\Charge;
-
     class SystemService
     {
         /**
@@ -52,18 +44,6 @@
                 ->with('salon')
                 ->get();
         }
-        /**
-         * Get monthly payment history - yearMonth, users count, total amount
-         *
-         * @return App\Models\Payments
-         */
-        // public function getMonthlyPayment() {
-        //     return Payment::select(DB::raw('payment_for, COUNT(id) as total_users, SUM(amount) as total_amount'))
-        //         ->groupBy('payment_for')
-        //         ->orderBy('payment_for', 'desc')
-        //         ->limit(12)
-        //         ->get();
-        // }
 
         /**
          * Output salon info to CSV
@@ -71,7 +51,7 @@
          * @param String $filename
          *
          */
-        public function createCSV(String $filename) {
+        public function createCSV() {
             $head = [
                 'サロンID',
                 'サロン名',
@@ -82,16 +62,16 @@
                 date('Y').'年'.date('m').'月決済金額'
             ];
 
-            $users = User::leftJoin('payments', function ($join) {
-                $join->on('users.id', '=', 'payments.user_id')
-                    ->where('payments.payment_for', date('Ym'));
+            $users = User::select('users.id as user_id', 'users.name', 'users.salon_id', 'payments.amount')
+                ->leftJoin('payments', 'users.id', '=', 'payments.user_id')
+                ->where('payments.payment_for', date('Ym'))
+                ->where(function($query) {
+                    $query->whereNull('users.deleted_at')
+                        ->orWhere('users.deleted_at', '>=', strtotime(date('Ym').'01 00:00:00'));
                 })
-                ->whereNotNull('users.salon_id')
-                ->whereNull('users.deleted_at')
-                ->orWhere('users.deleted_at', '>=', strtotime(date('Ym').'01 00:00:00'))
                 ->orderBy('users.salon_id', 'asc')
-                ->orderBy('payments.amount')
-                ->orderBy('users.id', 'asc')
+                ->orderBy('amount')
+                ->orderBy('user_id', 'asc')
                 ->get();
 
             $info = [];
@@ -102,9 +82,9 @@
                     'salon_name' => $user->salon->name?? 'NULL',
                     'owner_name' => $user->salon->owner->owner_name ?? 'NULL',
                     'facebook' => $user->salon->facebook?? 'NULL',
-                    'userId' => $user->id,
+                    'userId' => $user->user_id,
                     'userName' => $user->name,
-                    'payment' => $user->amount?? 'FAIL'
+                    'payment' => $user->amount?? ''
                 ];
             }
 

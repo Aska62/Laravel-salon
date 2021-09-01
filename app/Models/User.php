@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Salon;
 use App\Models\Payment;
 use Laravel\Cashier\Billable;
-use Stripe\Stripe;
 
 class User extends Model
 {
@@ -34,7 +33,7 @@ class User extends Model
     {
         return $this->belongsTo(Salon::class);
     }
-
+    // paymentS
     public function payment()
     {
         return $this->hasMany(Payment::class);

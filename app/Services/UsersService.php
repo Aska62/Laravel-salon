@@ -3,12 +3,9 @@
 
     use App\Models\User;
     use App\Models\Salon;
-    use App\Models\Owner;
     use App\Models\Payment;
-
     use Illuminate\Http\Request;
     use Illuminate\Pagination\Paginator;
-    use Illuminate\Support\Facades\Auth;
     use Laravel\Cashier\Cashier;
     use Stripe\Stripe;
     use Stripe\Charge;
@@ -52,8 +49,8 @@
          */
         public function isNewUser(Salon $salon, String $user_email) {
             $users = $salon->getAllUsers();
-            foreach($users as $user) {
-                if($user->email == $user_email) {
+            foreach ($users as $user) {
+                if ($user->email == $user_email) {
                     return false;
                 }
             }
@@ -68,7 +65,7 @@
          * @return Boolean
          */
         public function isOwner(Salon $salon, String $user_email) {
-            if($salon->owner->email == $user_email) {
+            if ($salon->owner->email == $user_email) {
                 return true;
             } else {
                 return false;
@@ -88,9 +85,9 @@
                 'email' => $request->user_email,
                 'source'=> $request->stripeToken
             ]);
-
+            $salon = $this->getSalonById($request->salon_id);
             $charge = Charge::create(array(
-                'amount' => $request->fee,
+                'amount' => $salon->fee,
                 'currency' => 'jpy',
                 'customer'=> $customer->id
             ));
@@ -127,9 +124,10 @@
                 ->where('salon_id', $request->salon_id)
                 ->whereNull('deleted_at')
                 ->firstOrFail();
+            $salon = $this->getSalonById($request->salon_id);
             Payment::insert([
-                'amount' => $request->fee,
-                'salon_id' => $request->salon_id,
+                'amount' => $salon->fee,
+                'salon_id' => $salon->id,
                 'user_id' => $user->id,
                 'payment_for' => $yearMonth,
                 'created_at' => now()

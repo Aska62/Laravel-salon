@@ -41,5 +41,12 @@ class sendEmail implements ShouldQueue
                 ->subject($this->user->salon->name."へようこそ！")
                 ->from(config('mail.from.address'));
         });
+
+        // $owner_email = $this->user->salon->owner->email;
+        Mail::send('emails.noticeToOwner', ['user' => $this->user], function($message){
+            $message->to($this->user->salon->owner->email)
+                ->subject($this->user->salon->name."に新しい会員が参加しました")
+                ->from(config('mail.from.address'));
+        });
     }
 }

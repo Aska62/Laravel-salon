@@ -28,7 +28,6 @@ Route::prefix('owners')->group(function() {
     Route::get('create', [OwnersController::class, 'create'])->name('owner.create');
     Route::post('add', [OwnersController::class, 'addSalon'])->name('owner.submit');
     Route::get('thanks', [OwnersController::class, 'success'])->name('owner.thanks');
-    Route::get('test', [OwnersController::class, 'test'])->name('test');
 });
 
 Route::prefix('system')->group(function() {

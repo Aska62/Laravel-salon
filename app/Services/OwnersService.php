@@ -3,9 +3,7 @@
 
     use App\Models\Owner;
     use App\Models\Salon;
-    use DB;
     use Illuminate\Http\Request;
-    use Illuminate\Validation\Rule;
     use Image;
 
     class OwnersService
@@ -18,10 +16,10 @@
          * @return Boolean
          */
         public function isNewOwner($owner_email) {
-            $owner_id = Owner::whereNull('deleted_at')
+            $owner_count = Owner::whereNull('deleted_at')
                 ->where('email', $owner_email)
                 ->count();
-            if($owner_id > 0){
+            if($owner_count > 0){
                 return false;
             } else {
                 return true;
@@ -33,14 +31,14 @@
          *
          * @param String $owner_email
          *
-         * @return App/Models/Owner
+         * @return Int $owner_id
          */
         public function findOwnerIdByEmail($owner_email) {
-            $owner_id = Owner::whereNull('deleted_at')
+            $owner = Owner::whereNull('deleted_at')
                 ->where('email', $owner_email)
                 ->first();
-            if($owner_id) {
-                return $owner_id->id;
+            if($owner) {
+                return $owner->id;
             } else {
                 return NULL;
             }

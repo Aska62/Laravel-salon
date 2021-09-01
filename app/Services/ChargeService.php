@@ -3,10 +3,7 @@
 
     use App\Models\User;
     use App\Models\Payment;
-    use Illuminate\Http\Request;
-    use Illuminate\Validation\Rule;
     use Illuminate\Support\Facades\Mail;
-    use Laravel\Cashier\Cashier;
     use Stripe\Stripe;
     use Stripe\Charge;
 
@@ -22,46 +19,41 @@
                 ->whereNull('pm_type')
             // ->where('users.created_at', '<', strtotime(date('Ym').'01 00:00:00'))
                 ->get();
-
             foreach($users as $user) {
+                $paid = 0;
                 Stripe::setApiKey(env('STRIPE_SECRET'));
                 if(!$user->hasPaymentMethod()) {
                     $this->sendEmailToUser($user);
                     $this->sendEmailToOwner($user);
                 } else {
-                    $customer;
+                    $customer = [];
                     try {
                         $customer = \Stripe\Customer::retrieve($user->stripe_id);
-                    } catch (\Stripe\Exception\InvalidRequestException $e) {
-                        $this->sendEmailToUser($user);
-                        $this->sendEmailToOwner($user);
-                    } catch ( Exception $e ){
-                        // send email to user and owner
-                        $this->sendEmailToUser($user);
-                        $this->sendEmailToOwner($user);
-                    }
-                    try {
                         $amount = $user->salon->fee;
-                        $charge = Charge::create(array(
+                        Charge::create(array(
                             'amount' => $amount,
                             'currency' => 'jpy',
                             'customer' => $customer->id
                         ));
-                        // update pament table
-                        $yearMonth = (int)(date("Y").date("m"));
-                        Payment::insert([
-                            'amount' => $amount,
-                            'salon_id' => $user->salon->id,
-                            'user_id' => $user->id,
-                            'payment_for' => $yearMonth,
-                            'created_at' => now()
-                        ]);
-                    } catch ( Exception $e ){
+                        $paid = $amount;
+                    } catch( \Exception $e ){
                         // send email to user and owner
+                        echo('エラー！');
                         $this->sendEmailToUser($user);
                         $this->sendEmailToOwner($user);
+                        $paid = null;
+                        echo(1);
                     }
                 }
+                $yearMonth = (int)(date("Y").date("m"));
+                echo($user->id.' '.$yearMonth);
+                Payment::insert([
+                    'amount' => $paid,
+                    'salon_id' => $user->salon->id,
+                    'user_id' => $user->id,
+                    'payment_for' => $yearMonth,
+                    'created_at' => now()
+                ]);
             }
         }
 

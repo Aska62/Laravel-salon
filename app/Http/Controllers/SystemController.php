@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Services\SystemService;
-use Illuminate\Http\Request;
 
 class SystemController extends Controller
 {
@@ -54,7 +53,7 @@ class SystemController extends Controller
      *
      * @return response
      */
-    public function outputCSV(Request $request) {
+    public function outputCSV() {
         $filename = 'info-'.date('YmdHis').'.csv';
         $header = [
             'Content-Type' => 'text/csv',
@@ -62,7 +61,7 @@ class SystemController extends Controller
             'Pragma' => 'no-cache',
         ];
         return response()->streamDownload(function() use ($filename) {
-            $this->systemSer->createCsv($filename);
+            $this->systemSer->createCsv();
             },
             $filename,
             $header
