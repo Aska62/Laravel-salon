@@ -157,5 +157,22 @@
             $salon = $this->getSalonById($salon_id);
             return $salon->owner;
         }
+
+        // FOR API
+        /**
+         * Register news user to db
+         *
+         * @param Request $request
+         * @return App\Models\User $user
+         */
+        public function registerUserWoStripe(Request $request) {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'salon_id' => $request->salon_id,
+                'created_at' => now()
+            ]);
+            return $user;
+        }
     }
 

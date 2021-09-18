@@ -3,6 +3,7 @@
 
     use App\Models\Owner;
     use App\Models\User;
+    use App\Models\Salon;
     use Illuminate\Pagination\Paginator;
     class SystemService
     {
@@ -12,7 +13,67 @@
          * @return App\Models\Owner
          */
         public function getAllOwners() {
-            return Owner::whereNull('deleted_at')->with('salon')->get();
+            return Owner::whereNull('deleted_at')
+                ->with('salon')
+                ->get();
+        }
+
+        /**
+         * Get paginated active owners
+         *
+         * @return App\Models\Owner
+         */
+        public function getPaginatedOwners() {
+            return Owner::whereNull('deleted_at')
+                ->paginate(10);
+        }
+        /**
+         * Get active owners by User Name
+         *
+         * @param Int $user_name
+         * @return App\Models\Owner
+         */
+        public function getOwnersByUserName($user_name) {
+            $users = $this->getUserByName($user_name);
+            $owner_ids = [];
+            foreach($users as $user) {
+                array_push($owner_ids, $user->salon->owner->id);
+            }
+
+            return Owner::whereIn('id', $owner_ids)->get();
+        }
+
+        /**
+         * Get owner detail
+         *
+         * @param int $owner_id
+         * @return App\Models\Owner
+         */
+        public function getOwnerDetail($owner_id) {
+            return Owner::findOrFail($owner_id);
+        }
+
+        /**
+         * Get owner info by name
+         *
+         * @param String $owner_name
+         * @return App\Models\Onwer
+         */
+        public function getOwnerByName($owner_name) {
+            $pat = '%' . addcslashes($owner_name, '%_\\') . '%';
+            return Owner::where('owner_name', 'LIKE', $pat)
+                ->get();
+        }
+
+        /**
+         * Get user info by name
+         *
+         * @param String $user_name
+         * @return App\Models\User
+         */
+        public function getUserByName($user_name) {
+            $pat = '%' . addcslashes($user_name, '%_\\') . '%';
+            return User::where('name', 'LIKE', $pat)->get();
         }
 
         /**
@@ -43,6 +104,16 @@
             return User::whereNull('deleted_at')
                 ->with('salon')
                 ->get();
+        }
+
+        /**
+         * Get detail salon info
+         *
+         * @param Int $salon_id
+         * @return App\Models\Salon
+         */
+        public function getSalonInfo($salon_id) {
+            return Salon::findOrFail($salon_id);
         }
 
         /**

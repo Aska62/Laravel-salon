@@ -51,12 +51,14 @@
          *
          */
         public function storeOwner(Array $data) {
-            Owner::insert([
+            $owner = Owner::insert([
                 'owner_name' => $data['owner_name'],
                 'email' => $data['email'],
                 'profile' => $data['profile'],
                 'created_at' => now()
             ]);
+
+            return $owner;
         }
 
         /**
@@ -72,13 +74,15 @@
             $image_path = $request
                 ->file('image')
                 ->storeAs('public/salonImages/', $request->name.'.'.$file_ex);
+
             // store thumbnail
             Image::make($request->file('image'))
                 ->fit(640, 640, function($constraint) {
                     $constraint->upsize();
                 })
                 ->save('public/salonImages/thumb-'.$request->name.'.'.$file_ex, 100);
-            Salon::insert([
+
+            $salon = Salon::insert([
                 'name' => $request->name,
                 'fee' => $request->fee,
                 'abstract' => $request->abstract,
@@ -90,6 +94,8 @@
                 'owner_id' => $owner_id,
                 'created_at' => now()
             ]);
+
+            return $salon;
         }
 
         /**
@@ -106,5 +112,26 @@
             } else {
                 return NULL;
             }
+        }
+        /**
+         * Regiser a new salon without Image
+         *
+         * @param Array $data
+         * @param Int $owner_id
+         */
+        public function storeSalonWoImage(Request $request, $owner_id) {
+            $salon = Salon::insert([
+                'name' => $request->name,
+                'fee' => $request->fee,
+                'abstract' => $request->abstract,
+                'recommend' => $request->recommend,
+                'benefit' => $request->benefit,
+                'facebook' => $request->facebook,
+                'max_members' => $request->max_members,
+                'owner_id' => $owner_id,
+                'created_at' => now()
+            ]);
+
+            return $salon;
         }
     }

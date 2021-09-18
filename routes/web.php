@@ -31,8 +31,9 @@ Route::prefix('owners')->group(function() {
 });
 
 Route::prefix('system')->group(function() {
-    Route::get('top', [SystemController::class, 'systemTop'])->name('system.top');
+    Route::get('owners', [SystemController::class, 'systemTop'])->name('system.top');
     Route::get('users', [SystemController::class, 'listUsers'])->name('system.users');
+    Route::get('salons', [SystemController::class, 'listSalons'])->name('system.salons');
     Route::get('payments', [SystemController::class, 'paymentHistory'])->name('system.payments');
     Route::get('output', [SystemController::class, 'outputCSV'])->name('system.output');
 });

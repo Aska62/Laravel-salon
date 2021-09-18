@@ -36,7 +36,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            // どんな処理を書くべき？reportableってどこに報告する？
+
         });
     }
 }

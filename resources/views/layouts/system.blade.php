@@ -26,7 +26,7 @@
         <a class="header__link system_header-left" href="{{ route('owner.home')}}">
             オーナーの方
         </a>
-        <a class="header__logo system-header-logo" href="{{route('user.home')}}">
+        <a class="header__logo system-header-logo" href="{{route('system.salons')}}">
             <h1 class="logo_main">みんなのサロン</h1>
             <p class="logo_sub">Online Salons</p>
         </a>

@@ -25,7 +25,7 @@ class SalonRequest extends FormRequest
     {
         return [
             'owner_name' => 'required',
-            'email' => 'required',
+            'email' => 'required|email',
             'profile' => 'required',
             'name' => [
                 'required',
@@ -37,7 +37,7 @@ class SalonRequest extends FormRequest
             'benefit' => 'required',
             'facebook' => 'required',
             'max_members' => 'required|numeric|min:1',
-            'image' => 'required|max:1024|mimes:jpeg,jpg,png'
+            'image' => 'max:1024|mimes:jpeg,jpg,png'
         ];
     }
     /**

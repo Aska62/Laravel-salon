@@ -39,6 +39,25 @@ class Owner extends Model
         return $this->hasMany(Salon::class)->whereNotNull('deleted_at');
     }
 
+    /**
+     * Get total capacity of all the salon the owner has
+     *
+     * @return int $capacity
+     */
+    public function getCapacity() {
+        $salons = $this->activeSalon();
+        $capacity = 0;
+        foreach($salons->get() as $salon) {
+            $capacity += $salon->max_members;
+        }
+        return $capacity;
+    }
+
+    /**
+     * Count sum of active users of existing salons
+     *
+     * @return int $followers
+     */
     public function countFollwers() {
         $salons = $this->activeSalon();
         $followers = 0;

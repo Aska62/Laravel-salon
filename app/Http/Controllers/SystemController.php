@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Services\SystemService;
+use App\Services\UsersService;
 
 class SystemController extends Controller
 {
     protected $request;
     protected $systemSer;
+    protected $usersSer;
 
-    public function __construct(SystemService $systemSer) {
+    public function __construct(SystemService $systemSer, UsersService $usersSer) {
         $this->systemSer = $systemSer;
+        $this->usersSer = $usersSer;
     }
 
     /**
@@ -21,6 +24,18 @@ class SystemController extends Controller
     public function systemTop() {
         return view('system.top.index', [
             'owners' => $this->systemSer->getAllOwners()
+        ]);
+    }
+
+    /**
+     * Display salon list
+     *
+     * @return view
+     */
+    public function listSalons() {
+        ddd($this->systemSer->getOwnerByName('丸山権三'));
+        return view('system.salons.index', [
+            'salons' => $this->usersSer->getAllSalons()
         ]);
     }
 

@@ -39,6 +39,11 @@ class User extends Model
         return $this->hasMany(Payment::class);
     }
 
+    public function getAllPaymentYM()
+    {
+        return $this->payment()->select('payment_for')->get();
+    }
+
     public function paymentOfTheMonth()
     {
         return $this->payment()

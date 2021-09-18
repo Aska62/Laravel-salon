@@ -6,6 +6,8 @@ use App\Models\Salon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UserRequest extends FormRequest
 {
@@ -28,7 +30,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => [
-                'required',
+                'required|email',
                 Rule::unique('users', 'email')->where(function($query) use($request) {
                     $query->where('salon_id', $request->salon_id)
                         ->whereNull('deleted_at');
@@ -63,5 +65,22 @@ class UserRequest extends FormRequest
         return [
             'email:unique' => 'このメールアドレスは登録済みです。'
         ];
+    }
+
+
+    /**
+     * failedValidation
+     * @param Validator $validator
+     * @return HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json(
+            [
+                'status' => Config('define.result.NG'),
+                'message' => $validator->errors()->first(),
+            ],
+            Config('define.result.validationError.status'))
+        );
     }
 }
